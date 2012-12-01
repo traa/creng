@@ -93,9 +93,9 @@ module Creng
 	 		
 			generateJS([ProcessJS.new, ContentJS.new, BackgroundJS.new, DaemonJS.new])
 
-			generateLibs
+			fetchLibs
 			generateHTML
-
+			fetchImages
 			generateManifest
 			puts "		create #{@projectname}/dev/manifest.json"
 	 	end
@@ -118,7 +118,7 @@ module Creng
 	 	end
 
 
-	 	def generateLibs
+	 	def fetchLibs
 
 	 		require 'open-uri'
 
@@ -171,6 +171,31 @@ module Creng
 		 	puts "		fetching requirejs from https://github.com/jrburke/requirejs"
 
 
+	 	end
+
+
+	 	def fetchImages
+	 		#fetching sample extension icons from github
+	 		File.open("#{@projectname}/dev/images/extension-16x16.png", 'w') do |f|
+			 	open("https://raw.github.com/traa/creng/master/lib/creng/vendor/images/extension-16x16.png", 'rb') do |read_file|
+				    f.write(read_file.read)
+				end
+		 	end
+		 	puts "		fetching extension icon 16x16 from https://github.com/traa/creng"
+
+	 		File.open("#{@projectname}/dev/images/extension-48x48.png", 'w') do |f|
+			 	open("https://raw.github.com/traa/creng/master/lib/creng/vendor/images/extension-48x48.png", 'rb') do |read_file|
+				    f.write(read_file.read)
+				end
+		 	end
+		 	puts "		fetching extension icon 48x48 from https://github.com/traa/creng"
+
+	 		File.open("#{@projectname}/dev/images/extension-64x64.png", 'w') do |f|
+			 	open("https://raw.github.com/traa/creng/master/lib/creng/vendor/images/extension-64x64.png", 'rb') do |read_file|
+				    f.write(read_file.read)
+				end
+		 	end
+		 	puts "		fetching extension icon 64x64 from https://github.com/traa/creng"
 	 	end
 
 

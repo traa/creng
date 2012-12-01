@@ -67,8 +67,8 @@ module Creng
 	    	puts "		create #{projectname}/dev/images"
 	    	FileUtils.mkdir_p "#{projectname}/dev/images"
 
-	    	puts "		create #{projectname}/dev/html"
-	    	FileUtils.mkdir_p "#{projectname}/dev/html"
+	    	puts "		create #{projectname}/dev/html/options"
+	    	FileUtils.mkdir_p "#{projectname}/dev/html/options"
 
 	    	puts "		create #{projectname}/dev/js"
 	    	FileUtils.mkdir_p "#{projectname}/dev/js/"

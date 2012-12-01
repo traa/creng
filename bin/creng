@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+
+require 'creng'
+
+
+module Creng
+  class CLI
+
+  	def initialize(*args)
+
+	        if args.empty?
+				puts 'no argument specified'
+			else
+				gen = Creng::Generator.new
+				gen.run args
+			end
+
+  	end
+
+  end
+end
+
+
+
+
+
+
+
+Creng::CLI.new(*ARGV)
+

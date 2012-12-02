@@ -201,7 +201,7 @@ module Creng
 
 	 	def generateHTML
 
-	 		File.open("#{@projectname}/dev/html/background.html", 'w') do |f|
+	 		File.open("#{@projectname}/dev/html/background_persistent.html", 'w') do |f|
 
 	 			f.write <<-"...".gsub!(/^ {20}/, '')
                     <!doctype html>
@@ -218,7 +218,7 @@ module Creng
 	 			...
 
 		 	end
-		 	puts "		create #{@projectname}/dev/html/background.html"
+		 	puts "		create #{@projectname}/dev/html/background_persistent.html"
 
 	 	end
 

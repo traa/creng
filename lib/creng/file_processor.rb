@@ -11,6 +11,8 @@ module Creng
       FileUtils.remove_dir "#{clean_path}/build"
       FileUtils.copy_entry "#{clean_path}/dev", "#{clean_path}/build", false, true
 
+      
+
 
       files = Dir["#{clean_path}/dev/js/*.js"]
 
@@ -45,21 +47,14 @@ module Creng
       end
       #endof files loop
 
-      manifest_text = File.read("#{clean_path}/build/manifest.json")
+      FileProcessor.processManifest clean_path, accessible_resources do |manifest_text, accessible_resources_new|
+        #changing web_accessible_resources array
+        manifest_text = manifest_text.gsub(/(\"web_accessible_resources\")\s?\:\s?(\[.*\])/, "\"web_accessible_resources\": [#{accessible_resources_new.join(',')}]")
+        #changing background object
+        manifest_text = FileProcessor.processBackgroundPage clean_path, manifest_text
 
-      accessible_resources_new = []
 
-      accessible_resources.each do |res|
-        accessible_resources_new.push("\"#{res}\"")
       end
-      #puts "ac res #{accessible_resources_new}, #{accessible_resources}"
-      manifest_text = manifest_text.gsub(/(\"web_accessible_resources\")\s?\:\s?(\[.*\])/, "\"web_accessible_resources\": [#{accessible_resources_new.join(',')}]")
-      
-      File.open("#{clean_path}/build/manifest.json", 'w') do |f|
-          f.write manifest_text
-      end
-
-      puts "    processed manifest.json"
 
 	 	end
 
@@ -89,6 +84,66 @@ return exports;});
         else
           puts "you must be in project directory"
         end
+
+    end
+
+
+    def self.processHTML path, manifest_text
+
+      
+
+
+
+    end
+
+
+    def self.processBackgroundPage path, manifest_text
+
+      if File.file? "#{path}/build/html/background.html"
+        background_page = "#{path}/build/html/background.html"
+        background_persistent = true
+      elsif File.file? "#{path}/build/html/background_persistent.html"
+        background_page = "#{path}/build/html/background_persistent.html"
+        #renaming to default
+        File.rename background_page, "#{path}/build/html/background.html"
+        background_persistent = false
+      else
+        background_page = nil
+        background_persistent = nil
+      end
+
+      unless background_page.nil?
+        manifest_text = manifest_text.gsub(/(\"persistent\")\s?\:\s?(true|false)/, "\"persistent\": #{background_persistent}")
+      else
+        manifest_text = manifest_text.gsub(/(\"background\")\s?\:\s?(\{(.|\n)*\}\,)/, "")
+       
+      end 
+       
+
+        puts "    processed html/background.html"
+        manifest_text
+
+    end
+
+
+    def self.processManifest clean_path, accessible_resources
+
+      manifest_text = File.read("#{clean_path}/build/manifest.json")
+
+      accessible_resources_new = []
+
+      accessible_resources.each do |res|
+        accessible_resources_new.push("\"#{res}\"")
+      end
+      #puts "ac res #{accessible_resources_new}, #{accessible_resources}"
+      
+      manifest_text = yield(manifest_text, accessible_resources_new) if block_given?
+
+      File.open("#{clean_path}/build/manifest.json", 'w') do |f|
+          f.write manifest_text
+      end
+
+      puts "    processed manifest.json"
 
     end
 

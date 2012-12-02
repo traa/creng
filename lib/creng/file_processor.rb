@@ -52,6 +52,8 @@ module Creng
         manifest_text = manifest_text.gsub(/(\"web_accessible_resources\")\s?\:\s?(\[.*\])/, "\"web_accessible_resources\": [#{accessible_resources_new.join(',')}]")
         #changing background object
         manifest_text = FileProcessor.processBackgroundPage clean_path, manifest_text
+        #checking js/frameworks dir
+        manifest_text = FileProcessor.processFrameworks clean_path, manifest_text
 
 
       end
@@ -135,7 +137,6 @@ return exports;});
       accessible_resources.each do |res|
         accessible_resources_new.push("\"#{res}\"")
       end
-      #puts "ac res #{accessible_resources_new}, #{accessible_resources}"
       
       manifest_text = yield(manifest_text, accessible_resources_new) if block_given?
 
@@ -144,6 +145,60 @@ return exports;});
       end
 
       puts "    processed manifest.json"
+
+    end
+
+
+    def self.processFrameworks clean_path, manifest_text
+
+      background_files = Dir["#{clean_path}/build/js/frameworks/background/*.js"]
+      content_files = Dir["#{clean_path}/build/js/frameworks/content/*.js"]
+      both_files = Dir["#{clean_path}/build/js/frameworks/*.js"]
+
+
+      content_pool = ["\"js/process.js\""]
+      background_pool = []
+
+
+      background_files.each do |file|
+        if File.file? file
+          background_pool.push "\"js/frameworks/#{File.basename file}\""
+        end
+      end
+      FileUtils.mv background_files, "#{clean_path}/build/js/frameworks"
+
+
+      content_files.each do |file|
+       if File.file? file
+          content_pool.push "\"js/frameworks/#{File.basename file}\""
+        end
+      end
+      FileUtils.mv content_files, "#{clean_path}/build/js/frameworks"
+
+      both_files.each do |file|
+       if File.file? file
+          content_pool.push "\"js/frameworks/#{File.basename file}\""
+          background_pool.push "\"js/frameworks/#{File.basename file}\""
+        end
+      end
+
+      FileUtils.remove_dir "#{clean_path}/build/js/frameworks/content"
+      FileUtils.remove_dir "#{clean_path}/build/js/frameworks/background"
+
+
+     #replacing for content scripts loaded frameworks 
+    if content_pool.length
+        manifest_text = manifest_text.gsub(/\"content_scripts\"\s*\:\s*?(?:.|\n)*\"js\"\s?\:\s*(\[(?:.|\n)*?\])/) { |m| m.gsub!($1, "[#{content_pool.join(',')}]") } 
+    end
+
+    #@TODO: background page logic handling (insert script tags into html)
+    if background_pool.length
+
+    end
+     
+
+
+     manifest_text
 
     end
 

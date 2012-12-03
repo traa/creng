@@ -58,17 +58,20 @@ module Creng
 
 	    	puts "		initialized project with name #{projectname}"
 
-	    	puts "		create #{projectname}/dev/js/frameworks/content"
-	    	FileUtils.mkdir_p "#{projectname}/dev/js/frameworks/content"
+	    	puts "		create #{projectname}/dev/js/vendor/content"
+	    	FileUtils.mkdir_p "#{projectname}/dev/js/vendor/content"
 
-        puts "    create #{projectname}/dev/js/frameworks/background"
-        FileUtils.mkdir_p "#{projectname}/dev/js/frameworks/background"
+        puts "        create #{projectname}/dev/js/vendor/utils"
+        FileUtils.mkdir_p "#{projectname}/dev/js/vendor/utils"
+
+        puts "        create #{projectname}/dev/js/vendor/background"
+        FileUtils.mkdir_p "#{projectname}/dev/js/vendor/background"
 
 	    	puts "		create #{projectname}/dev/images"
 	    	FileUtils.mkdir_p "#{projectname}/dev/images"
 
-	    	puts "		create #{projectname}/dev/html/options"
-	    	FileUtils.mkdir_p "#{projectname}/dev/html/options"
+	    	puts "		create #{projectname}/dev/html"
+	    	FileUtils.mkdir_p "#{projectname}/dev/html"
 
 	    	puts "		create #{projectname}/dev/js"
 	    	FileUtils.mkdir_p "#{projectname}/dev/js/"

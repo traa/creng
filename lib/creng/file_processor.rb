@@ -9,6 +9,10 @@ module Creng
 	 	def self.process(clean_path, options, accessible_resources)
 
       FileUtils.remove_dir "#{clean_path}/build"
+
+      #raising build version
+      FileProcessor.raiseDevBuildVersion clean_path
+
       FileUtils.copy_entry "#{clean_path}/dev", "#{clean_path}/build", false, true
 
       
@@ -52,11 +56,17 @@ module Creng
         manifest_text = manifest_text.gsub(/(\"web_accessible_resources\")\s?\:\s?(\[.*\])/, "\"web_accessible_resources\": [#{accessible_resources_new.join(',')}]")
         #changing background object
         manifest_text = FileProcessor.processBackgroundPage clean_path, manifest_text
-        #checking js/frameworks dir
+        #checking js/vendor dir
         manifest_text = FileProcessor.processFrameworks clean_path, manifest_text
+        #checking options page
+        manifest_text = FileProcessor.processOptionsPage clean_path, manifest_text
+
+
 
 
       end
+
+
 
 	 	end
 
@@ -90,25 +100,17 @@ return exports;});
     end
 
 
-    def self.processHTML path, manifest_text
-
-      
-
-
-
-    end
-
 
     def self.processBackgroundPage path, manifest_text
 
       if File.file? "#{path}/build/html/background.html"
         background_page = "#{path}/build/html/background.html"
-        background_persistent = true
+        background_persistent = false
       elsif File.file? "#{path}/build/html/background_persistent.html"
         background_page = "#{path}/build/html/background_persistent.html"
         #renaming to default
         File.rename background_page, "#{path}/build/html/background.html"
-        background_persistent = false
+        background_persistent = true
       else
         background_page = nil
         background_persistent = nil
@@ -151,9 +153,9 @@ return exports;});
 
     def self.processFrameworks clean_path, manifest_text
 
-      background_files = Dir["#{clean_path}/build/js/frameworks/background/*.js"]
-      content_files = Dir["#{clean_path}/build/js/frameworks/content/*.js"]
-      both_files = Dir["#{clean_path}/build/js/frameworks/*.js"]
+      background_files = Dir["#{clean_path}/build/js/vendor/background/*.js"]
+      content_files = Dir["#{clean_path}/build/js/vendor/content/*.js"]
+      both_files = Dir["#{clean_path}/build/js/vendor/*.js"]
 
 
       content_pool = ["\"js/process.js\""]
@@ -162,28 +164,28 @@ return exports;});
 
       background_files.each do |file|
         if File.file? file
-          background_pool.push "\"js/frameworks/#{File.basename file}\""
+          background_pool.push "<script type='text/javascript' src='js/vendor/#{File.basename file}'></script>"
         end
       end
-      FileUtils.mv background_files, "#{clean_path}/build/js/frameworks"
+      FileUtils.mv background_files, "#{clean_path}/build/js/vendor"
 
 
       content_files.each do |file|
        if File.file? file
-          content_pool.push "\"js/frameworks/#{File.basename file}\""
+          content_pool.push "\"js/vendor/#{File.basename file}\""
         end
       end
-      FileUtils.mv content_files, "#{clean_path}/build/js/frameworks"
+      FileUtils.mv content_files, "#{clean_path}/build/js/vendor"
 
       both_files.each do |file|
        if File.file? file
-          content_pool.push "\"js/frameworks/#{File.basename file}\""
-          background_pool.push "\"js/frameworks/#{File.basename file}\""
+          content_pool.push "\"js/vendor/#{File.basename file}\""
+          background_pool.push "<script type='text/javascript' src='js/vendor/#{File.basename file}'></script>"
         end
       end
 
-      FileUtils.remove_dir "#{clean_path}/build/js/frameworks/content"
-      FileUtils.remove_dir "#{clean_path}/build/js/frameworks/background"
+      FileUtils.remove_dir "#{clean_path}/build/js/vendor/content"
+      FileUtils.remove_dir "#{clean_path}/build/js/vendor/background"
 
 
      #replacing for content scripts loaded frameworks 
@@ -193,7 +195,7 @@ return exports;});
 
     #@TODO: background page logic handling (insert script tags into html)
     if background_pool.length
-
+      FileProcessor.changeBackgroundPage clean_path, background_pool
     end
      
 
@@ -203,6 +205,61 @@ return exports;});
     end
 
 
+    def self.changeBackgroundPage clean_path, background_pool
+
+      background_page_path = "#{clean_path}/build/html/background.html"
+
+      background_page_text = File.read(background_page_path)
+
+      background_page_text = background_page_text.gsub(/\<\/head\>/,"#{background_pool.join(' ')}</head>")
+
+      File.open(background_page_path, 'w') do |f|
+          f.write background_page_text
+      end
+
+    end
+
+
+    def self.processOptionsPage clean_path, manifest_text
+
+      options_page_path = "#{clean_path}/build/html/options.html"
+
+      if File.file? options_page_path
+        manifest_text = manifest_text.gsub(/\"manifest_version\"\s*\:\s*2\s*\,/, "\"manifest_text\": 2,\n \"options_page\": \"html/options.html\",")
+        puts "    processed html/options.html"
+      else
+        manifest_text = manifest_text.gsub(/\"options_page\"\s*\:\s*\"html\/options\.html\"\,/, "")
+        puts "    processed options page removing"
+      end
+
+
+      manifest_text
+    end
+
+
+    def self.raiseDevBuildVersion clean_path
+
+      manifest_dev_path = "#{clean_path}/dev/manifest.json"
+      manifest_text = File.read(manifest_dev_path)
+
+      manifest_text = manifest_text.gsub(/\"version\"\s*\:\s*\"(.*)\"\,/) { 
+
+        |text| 
+          digits = $1.split '.'
+          buildversion = digits[3].to_i + 1
+          new_version = "#{digits[0]}.#{digits[1]}.#{digits[2]}.#{buildversion}"
+          
+          text.gsub($1, "#{new_version}")
+
+      }
+      
+      File.open(manifest_dev_path, 'w') do |f|
+          f.write manifest_text
+      end
+
+    end
+
+      
 
 
 	 end

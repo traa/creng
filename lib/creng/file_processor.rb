@@ -60,6 +60,8 @@ module Creng
         manifest_text = FileProcessor.processFrameworks clean_path, manifest_text
         #checking options page
         manifest_text = FileProcessor.processOptionsPage clean_path, manifest_text
+        #checking browser_action or page_action pages
+        manifest_text = FileProcessor.processExtensionType clean_path, manifest_text
 
 
 
@@ -84,6 +86,22 @@ module Creng
             }).call(this);
 return exports;});
       ...
+    end
+
+    #type: browser_action or page_action
+    def self.ActionTemplate type, title
+
+            <<-"...".gsub!(/^ {3}/, '')
+   "#{type}": {
+    "default_icon": {                    
+      "19": "images/extension-48x48.png",          
+      "38": "images/extension-48x48.png"            
+    },
+    "default_title": "#{title}",      
+    "default_popup": "#{type}.html"       
+  }
+      ...
+
     end
 
 
@@ -234,6 +252,40 @@ return exports;});
 
 
       manifest_text
+    end
+
+    def self.processExtensionType clean_path, manifest_text
+
+      browser_action_page_path = "#{clean_path}/build/html/browser_action.html"
+      page_action_page_path = "#{clean_path}/build/html/page_action.html"
+
+
+      type = nil
+
+      manifest_text = manifest_text.gsub(/\,?\n?\"page_action\"\s*\:\s*\{(.|\n)*\}\,?/, "")
+      manifest_text = manifest_text.gsub(/\,?\n?\"browser_action\"\s*\:\s*\{(.|\n)*\}\,?/, "")
+
+      if File.file? browser_action_page_path
+        type = "browser_action"
+      elsif File.file? page_action_page_path
+        type = "page_action"
+      end
+        
+
+
+      unless type.nil?
+        page_text = File.read("#{clean_path}/build/html/#{type}.html")
+
+        title = page_text.match(/\<title\>(.*)\<\/title\>/)[1]
+        title = title.nil? ? "Action Title" : title
+        action_text = FileProcessor.ActionTemplate type, title
+
+
+        manifest_text = manifest_text.gsub(/(\]\n){1}(\})$/) { |m| m.gsub!($1, "],\n#{action_text}") } 
+      end
+
+      manifest_text
+
     end
 
 

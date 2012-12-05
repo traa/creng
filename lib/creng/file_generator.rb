@@ -83,7 +83,7 @@ module Creng
   ],
   "web_accessible_resources": #{accessible_resources}
 }
-        		...
+...
         	end
 
 	 	end

@@ -1,4 +1,4 @@
-Creng 0.3.5
+Creng 0.3.6
 =====
 
 ###Ruby gem for simple chrome extension development###
@@ -35,4 +35,5 @@ Must be executed in root of <projectname> folder. It builds entire project to **
  * Easy background page management, just remove it and creng will build extension without it. Want to use [event](http://developer.chrome.com/extensions/event_pages.html) background page? Simply rename background_persistent.html to background.html and build it!
  * Tracking of build version, auto-incrementation after every build x.x.x.buildversion
  * Handling of options page, just create **options.html** in **html** folder to start working with it.
+ * Automatical handling of extension type. Just create **html/browser_action.html** for [browser action type](https://developer.chrome.com/extensions/browserAction.html), **html/page_action.html** for [page action type](http://developer.chrome.com/extensions/pageAction.html) or delete those files (if created) to switch for hidden type extension. Title of popup will be parsed from <title> tag in those html files
  * And more to come! It's just an early version of gem, so i plan to constantly increase number of features

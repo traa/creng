@@ -28,7 +28,7 @@ Also, it fetches last versions of libraries, needed to correct work of extension
 Project build
 ------------
     creng build
-Must be executed in root of <projectname> folder. It builds entire project to **build** folder, executing following actions:
+Must be executed in root folder of <projectname>. It builds entire project to **build** folder, executing following actions:
  * Automatically managing frameworks dependencies (vendor/content folder frameworks will be added to content scripts in manifest file, vendor/background to background file (if it exists), vendor/ - to both)
  * Auto-wrap code into define statements (no more same code constructions needed for work of RequireJS)
  * Creng keeps an eye on "web_accessible_resources" for you (automatically manage it, so no more routine with writing all files)

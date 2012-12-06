@@ -61,11 +61,11 @@ module Creng
 	    	puts "		create #{projectname}/dev/js/vendor/content"
 	    	FileUtils.mkdir_p "#{projectname}/dev/js/vendor/content"
 
-        puts "        create #{projectname}/dev/js/vendor/utils"
-        FileUtils.mkdir_p "#{projectname}/dev/js/vendor/utils"
+        	puts "        create #{projectname}/dev/js/vendor/utils"
+        	FileUtils.mkdir_p "#{projectname}/dev/js/vendor/utils"
 
-        puts "        create #{projectname}/dev/js/vendor/background"
-        FileUtils.mkdir_p "#{projectname}/dev/js/vendor/background"
+        	puts "        create #{projectname}/dev/js/vendor/background"
+        	FileUtils.mkdir_p "#{projectname}/dev/js/vendor/background"
 
 	    	puts "		create #{projectname}/dev/images"
 	    	FileUtils.mkdir_p "#{projectname}/dev/images"
@@ -79,7 +79,7 @@ module Creng
 	    	puts "		create #{projectname}/build"
 	    	FileUtils.mkdir_p "#{projectname}/build"
 
-	  		FileGenerator.new projectname
+	  	FileGenerator.new projectname
 
 	       	
         end

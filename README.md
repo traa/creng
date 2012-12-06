@@ -11,7 +11,7 @@ It includes last versions of following frameworks/libs:
  * Cajon
 
 
-[Installation](https://github.com/traa/creng/wiki/Installation)
+[Installation](https://github.com/traa/creng/wiki/Installation)  | [Examples](https://github.com/traa/creng/wiki/Examples)  
 
 
 

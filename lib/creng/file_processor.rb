@@ -62,6 +62,8 @@ module Creng
         manifest_text = FileProcessor.processOptionsPage clean_path, manifest_text
         #checking browser_action or page_action pages
         manifest_text = FileProcessor.processExtensionType clean_path, manifest_text
+        #checks for overrided history, bookmarks and new tab pages
+        manifest_text = FileProcessor.processOverrideInternalPages clean_path, manifest_text
 
 
 
@@ -281,8 +283,44 @@ return exports;});
         action_text = FileProcessor.ActionTemplate type, title
 
 
-        manifest_text = manifest_text.gsub(/(\]\n){1}(\})$/) { |m| m.gsub!($1, "],\n#{action_text}") } 
+        manifest_text = manifest_text.gsub(/(\n){1}(\})$/) { |m| m.gsub!($1, ",\n#{action_text}") } 
       end
+
+      manifest_text
+
+    end
+
+
+    def self.processOverrideInternalPages clean_path, manifest_text
+
+      override_tab_page = "override_tab.html"
+      override_history_page = "override_history.html"
+      override_bookmarks_page = "override_bookmarks.html"
+
+      manifest_text = manifest_text.gsub(/\"chrome_url_overrides\"\s*\:\s*\{(.|\n)*\}\,/, "")
+      overriden_pages = []
+
+
+      if File.file? "#{clean_path}/dev/html/#{override_tab_page}"
+        overriden_pages.push("\"newtab\": \"#{override_tab_page}\"")
+      end
+
+      if File.file? "#{clean_path}/dev/html/#{override_history_page}"
+        overriden_pages.push("\"history\": \"#{override_history_page}\"")
+      end
+
+      if File.file? "#{clean_path}/dev/html/#{override_bookmarks_page}"
+        overriden_pages.push("\"bookmarks\": \"#{override_bookmarks_page}\"")
+      end
+
+      if overriden_pages.length > 0
+        overriden_pages_list = overriden_pages.join(" ,\n")
+        overriden_pages_string = "\"chrome_url_overrides\": {\n#{overriden_pages_list}\n}" 
+        manifest_text = manifest_text.gsub(/(\n){1}(\})$/) { |m| m.gsub!($1, ",\n#{overriden_pages_string}\n") }
+
+      end
+
+      puts "    processing overriden pages"
 
       manifest_text
 

@@ -36,4 +36,5 @@ Must be executed in root folder of projectname. It builds entire project to **bu
  * Tracking of build version, auto-incrementation after every build x.x.x.buildversion
  * Handling of options page, just create **options.html** in **html** folder to start working with it.
  * Automatical handling of extension type. Just create **html/browser_action.html** for [browser action type](https://developer.chrome.com/extensions/browserAction.html), **html/page_action.html** for [page action type](http://developer.chrome.com/extensions/pageAction.html) or delete those files (if created) to switch for hidden type extension. Title of popup will be parsed from <title> tag in those html files
+ * Override new tab, bookmarks and history pages simply by creating html files with the same name (more at [examples page](https://github.com/traa/creng/wiki/Examples))
  * And more to come! It's just an early version of gem, so i plan to constantly increase number of features

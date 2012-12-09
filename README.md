@@ -1,4 +1,4 @@
-Creng 0.3.6
+Creng 0.3.8
 =====
 
 ###Ruby gem for simple chrome extension development###

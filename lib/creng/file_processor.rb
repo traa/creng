@@ -22,8 +22,17 @@ module Creng
 
       files.each do |file|
 
+        #WORKING WITH ALL JS FILES (EXCEPT SUB DIRS)
         text = File.read(file)
         filename = File.basename(file)
+
+        #can be turned off with flag --withdevblock
+        if !options[:withdevblock]
+
+          #cutting blocks of code, which marked as "code for development version only"
+          FileTweaker.cutDevBlock file, text, filename
+
+        end
 
         exclusions_from_defining = ['process.js', 'daemon.js']
 

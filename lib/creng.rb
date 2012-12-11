@@ -2,7 +2,6 @@
 # encoding: utf-8
 
 require "creng/version"
-#require "creng/file_generator"
 require 'fileutils'
 require 'rdf/cli'
 
@@ -10,6 +9,7 @@ module Creng
 
  autoload :FileGenerator, 'creng/file_generator'
  autoload :FileProcessor, 'creng/file_processor'
+ autoload :FileTweaker, 'creng/file_tweaker'
  autoload :Feature, 'creng/feature'
 
  autoload :ProcessJS, 'creng/files/processjs'
@@ -30,6 +30,11 @@ module Creng
 	       self.on('-c', '--noconsole',   'Build without debug messages(console.* calls)') do
 	          options[:noconsole] = true
 	       end
+
+         self.on('-b', '--withdevblock', 'Build and extension with blocks of code for development purposes') do
+            options[:withdevblock] = true
+         end
+
 	  end
 	  args = ARGV
 	  @options = options

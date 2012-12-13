@@ -1,4 +1,4 @@
-Creng 0.3.8
+Creng 0.4.0
 =====
 
 ###Ruby gem for simple chrome extension development###
@@ -11,7 +11,7 @@ It includes last versions of following frameworks/libs:
  * Cajon
 
 
-[Installation](https://github.com/traa/creng/wiki/Installation)  | [Examples](https://github.com/traa/creng/wiki/Examples)  
+[Installation](https://github.com/traa/creng/wiki/Installation)  | [Examples](https://github.com/traa/creng/wiki/Examples) | [Flags](https://github.com/traa/creng/wiki/Flags)  
 
 
 
@@ -37,4 +37,6 @@ Must be executed in root folder of projectname. It builds entire project to **bu
  * Handling of options page, just create **options.html** in **html** folder to start working with it.
  * Automatical handling of extension type. Just create **html/browser_action.html** for [browser action type](https://developer.chrome.com/extensions/browserAction.html), **html/page_action.html** for [page action type](http://developer.chrome.com/extensions/pageAction.html) or delete those files (if created) to switch for hidden type extension. Title of popup will be parsed from <title> tag in those html files
  * Override new tab, bookmarks and history pages simply by creating html files with the same name (more at [examples page](https://github.com/traa/creng/wiki/Examples))
+ * Cut in build version marked blocks of code ( blocks marked with `//devblock_begin` and `//devblock_end`.
+ * Automatically removing all console.* calls in build. 
  * And more to come! It's just an early version of gem, so i plan to constantly increase number of features

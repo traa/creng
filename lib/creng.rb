@@ -2,8 +2,8 @@
 # encoding: utf-8
 
 require "creng/version"
-require 'fileutils'
-require 'rdf/cli'
+require "fileutils"
+require "rdf/cli"
 
 module Creng
 

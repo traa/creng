@@ -4,7 +4,7 @@ module Creng
 
 	 	#cutting blocks of code, marked as ###devblock_begin and ###devblock_end
 	 	#returns modified text of file
-	 	def self.cutDevBlock path, text, filename
+	 	def self.cutDevBlock text
 
 	 		text = text.gsub(/\/\/devblock_begin(.|\n)*?\/\/devblock_end/, "")
 
@@ -13,8 +13,11 @@ module Creng
 
 
 	 	#cutting all console.* calls
-	 	def self.cutDebugMessages
+	 	def self.cutDebugMessages text
 
+	 		text = text.gsub(/console\..*?\(.*\)(\;)?/, "")
+
+	 		text
 
 	 	end
 

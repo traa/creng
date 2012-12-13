@@ -32,7 +32,14 @@ module Creng
         if !options[:withdevblock]
 
           #cutting blocks of code, which marked as "code for development version only"
-          text = FileTweaker.cutDevBlock file, text, filename
+          text = FileTweaker.cutDevBlock text
+
+        end
+
+        #build without console.* calls
+        if options[:noconsole]
+
+          text = FileTweaker.cutDebugMessages text
 
         end
 

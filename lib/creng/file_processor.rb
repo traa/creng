@@ -1,4 +1,4 @@
-
+require 'digest/md5'
 
 module Creng
 
@@ -24,37 +24,44 @@ module Creng
 
         #WORKING WITH ALL JS FILES (EXCEPT SUB DIRS)
         text = File.read(file)
+        text_hash = Digest::MD5.hexdigest text
+
         filename = File.basename(file)
 
         #can be turned off with flag --withdevblock
         if !options[:withdevblock]
 
           #cutting blocks of code, which marked as "code for development version only"
-          FileTweaker.cutDevBlock file, text, filename
+          text = FileTweaker.cutDevBlock file, text, filename
 
         end
 
         exclusions_from_defining = ['process.js', 'daemon.js']
+
+        clean_path_for_regex = clean_path.gsub(/\//, '\/')
+
+        buildpath = file.gsub(Regexp.new("#{clean_path_for_regex}\/dev"), "#{clean_path}/build")
 
         #if define is allowed
         if !options[:nodefine]
           unless exclusions_from_defining.include? filename
             text = "#{FileProcessor.preDefine}#{text}#{FileProcessor.postDefine}"
 
-            clean_path_for_regex = clean_path.gsub(/\//, '\/')
+          end
+        end
+        #endof if define allowed
 
-            buildpath = file.gsub(Regexp.new("#{clean_path_for_regex}\/dev"), "#{clean_path}/build")
-
+        #only if file text was changed
+        if text_hash != (Digest::MD5.hexdigest(text))
 
             File.open(buildpath, 'w') do |f|
               f.write text
             end
 
             puts "    processed js/#{filename}"
-
-          end
         end
-        #endof if define allowed
+
+
 
 
       end

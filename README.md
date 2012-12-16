@@ -1,4 +1,4 @@
-Creng 0.4.0
+Creng 0.4.2
 =====
 
 ###Ruby gem for simple chrome extension development###
@@ -12,6 +12,8 @@ It includes last versions of following frameworks/libs:
 
 
 [Installation](https://github.com/traa/creng/wiki/Installation)  | [Examples](https://github.com/traa/creng/wiki/Examples) | [Flags](https://github.com/traa/creng/wiki/Flags)  
+
+[RubyGems page](https://rubygems.org/gems/creng)
 
 
 
@@ -39,4 +41,5 @@ Must be executed in root folder of projectname. It builds entire project to **bu
  * Override new tab, bookmarks and history pages simply by creating html files with the same name (more at [examples page](https://github.com/traa/creng/wiki/Examples))
  * Cut in build version marked blocks of code ( blocks marked with `//devblock_begin` and `//devblock_end`.
  * Automatically removing all console.* calls in build. 
+ * Adding [webRequest](https://developer.chrome.com/extensions/webRequest.html) functionality in a few seconds, by typing `creng feature add webrequest`
  * And more to come! It's just an early version of gem, so i plan to constantly increase number of features

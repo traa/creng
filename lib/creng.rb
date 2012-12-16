@@ -108,10 +108,9 @@ module Creng
 
       if Feature.respond_to? action
 
-        FileProcessor.inProjectDir do |curdir|
-          feature = Feature.new curdir
+        FileProcessor.inProjectDir do |curdir|      
 
-          feature.send(action, value)        
+          Feature.send(action, curdir, value)        
         end
 
         

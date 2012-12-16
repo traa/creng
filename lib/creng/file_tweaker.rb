@@ -21,6 +21,12 @@ module Creng
 
 	 	end
 
+	 	def self.manifestTweak
+
+	 		
+
+	 	end
+
 	 end
 
 end

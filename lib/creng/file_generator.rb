@@ -223,15 +223,20 @@ module Creng
 	 	end
 
 
-	 	def self.generateWebrequest projectname
+	 	def self.generateWebrequest projectpath
 
 	 		requestInspectorFile = RequestInspectorJS.new
 
-	 		File.open("#{projectname}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}", 'w') do |f|
-		 			f.write requestInspectorFile.contents
-		 	end
-		 	puts "		create #{projectname}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}"
+		 	unless File.file? "#{projectpath}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}"
 
+		 		File.open("#{projectpath}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}", 'w') do |f|
+			 			f.write requestInspectorFile.contents
+			 	end
+			 	puts "		create #{projectpath}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}"
+
+			 else
+			 	puts "		requestInspector already exists"
+			 end
 
 	 	end
 

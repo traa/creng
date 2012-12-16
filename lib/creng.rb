@@ -16,6 +16,7 @@ module Creng
  autoload :DaemonJS, 'creng/files/daemonjs'
  autoload :ContentJS, 'creng/files/contentjs'
  autoload :BackgroundJS, 'creng/files/backgroundjs'
+ autoload :RequestInspectorJS, 'creng/files/requestInspectorjs'
 
  class Generator
     
@@ -97,16 +98,6 @@ module Creng
   		FileProcessor.inProjectDir do |curdir|
         FileProcessor.process curdir, @options, FileGenerator.getAccessibleResources()
       end
-  		#curdir_match_project = (curdir =~ Regexp.new("\/#{projectname}(\/)?.*$")) #Regexp.escape(var))) #/­/)
-
-
-  		# unless curdir_match_project.nil?
-  		# 	clean_path = curdir[0..(curdir_match_project+projectname.length)]
-  		
-  		# 	FileProcessor.process clean_path, @options, FileGenerator.getAccessibleResources()
-
-  		# end
-
 
   	end
 
@@ -116,7 +107,14 @@ module Creng
       value = args[1]
 
       if Feature.respond_to? action
-        Feature.send(action, value)
+
+        FileProcessor.inProjectDir do |curdir|
+          feature = Feature.new curdir
+
+          feature.send(action, value)        
+        end
+
+        
       else
         puts "feature action not supported"
       end

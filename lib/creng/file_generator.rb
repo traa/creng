@@ -222,6 +222,19 @@ module Creng
 
 	 	end
 
+
+	 	def self.generateWebrequest projectname
+
+	 		requestInspectorFile = RequestInspectorJS.new
+
+	 		File.open("#{projectname}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}", 'w') do |f|
+		 			f.write requestInspectorFile.contents
+		 	end
+		 	puts "		create #{projectname}/dev/#{requestInspectorFile.path}/#{requestInspectorFile.name}"
+
+
+	 	end
+
 	 end
 
 end

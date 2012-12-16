@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["stagedown@gmail.com"]
   s.homepage    = "http://markeeper.ru"
   s.summary     = %q{Create chrome extension with ease}
-  s.description = %q{Using this gem, you can create chrome extension skeleton with no troubles}
+  s.description = %q{Using this gem, you can create chrome extension skeleton with no troubles. The aim of project to make development of chrome extensions more simple, giving to user time-tested tools and development patterns.}
 
   s.rubyforge_project = "creng"
 

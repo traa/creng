@@ -46,5 +46,6 @@ Must be executed in root folder of projectname. It builds entire project to **bu
 
  Adding features
 ------------
-    creng feature add webrequest
+    `  creng feature add webrequest   `
+    
  Adding [webRequest](https://developer.chrome.com/extensions/webRequest.html) functionality in a few seconds.
